@@ -10,7 +10,7 @@ port = '1883'
 topic = 'my_mqtt_topic'
 
 #function to act upon message
-def on_message(message):
+def on_message(client, userdata, message):
     print('Got a message at '+topic+', it reads: '+message)
 
 #Start MQTT
