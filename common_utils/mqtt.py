@@ -31,7 +31,7 @@ class mqtt_connection:
 
         self.client.subscribe(self.topic)
     def publish_to_topic(self,msg):
-        if self.connected:
+        if self.Connected:
             self.client.publish(self.topic,msg)
         else:
             print('client is not connected')
