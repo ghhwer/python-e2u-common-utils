@@ -11,7 +11,7 @@ topic = 'my_mqtt_topic'
 
 #function to act upon message
 def on_message(client, userdata, message):
-    print('Got a message at '+topic+', it reads: '+message)
+    print('Got a message at '+topic+', it reads: '+message.payload)
 
 #Start MQTT
 mqtt = mqtt_connection(client_id,host,port,usr,passw,topic,on_message)
