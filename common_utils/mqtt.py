@@ -17,7 +17,7 @@ class mqtt_connection:
         self.password = pwd                     #Connection password
         self.client_id = client_id              #Client id
         self.topic = topic                      #Topic
-
+        self.on_message = on_message
         self.client = mqttClient.Client(self.client_id)                     #create new instance
         self.client.username_pw_set(self.user, password=self.password)      #set username and password
         self.client.on_connect= self._on_connect                            #attach function to connection established call
@@ -29,8 +29,6 @@ class mqtt_connection:
 
         while self.Connected != True:    #Wait for connection
             time.sleep(0.1)
-
-        self.client.subscribe(self.topic)
     
     def publish_to_topic(self,msg):
         if self.Connected:
@@ -42,18 +40,13 @@ class mqtt_connection:
         self.Connected = False
         if rc != 0:
                 print "Unexpected MQTT disconnection. Attempting to reconnect."
-                try:
-                        self.client.reconnect()
-                        while self.Connected != True:    #Wait for connection
-                            time.sleep(1)
-                            self.client.reconnect()
-                except socket.error:
-                        print "Socket error!"
+                self.Connected = False
                         
     def _on_connect(self, client, userdata, flags, r):
         if r == 0:
             print(self.client_id + " Connected to broker")
-            self.Connected = True                           #Signal connection
+            self.Connected = True
+            self.client.subscribe(self.topic)
         else:
             print("Connection failed")
     
