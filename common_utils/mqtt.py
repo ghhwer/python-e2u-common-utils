@@ -20,9 +20,10 @@ class mqtt_connection:
 
         self.client = mqttClient.Client(self.client_id)                     #create new instance
         self.client.username_pw_set(self.user, password=self.password)      #set username and password
-        self.client.on_connect= self._on_connect                            #attach function to callback
+        self.client.on_connect= self._on_connect                            #attach function to connection established call
+        self.client.on_disconnect= self._on_disconnect                      #attach function to connection lost call
         self.client.on_message= on_message                                  #attach function to callback
-
+        
         self.client.connect(self.broker_address, port=self.port)          #connect to broker
         self.client.loop_start()                                          #start the loop
 
@@ -30,18 +31,32 @@ class mqtt_connection:
             time.sleep(0.1)
 
         self.client.subscribe(self.topic)
+    
     def publish_to_topic(self,msg):
         if self.Connected:
             self.client.publish(self.topic,msg)
         else:
             print('client is not connected')
 
+    def _on_disconnect(self, client, userdata, rc):
+        self.Connected = False
+        if rc != 0:
+                print "Unexpected MQTT disconnection. Attempting to reconnect."
+                try:
+                        self.client.reconnect()
+                        while self.Connected != True:    #Wait for connection
+                            time.sleep(1)
+                            self.client.reconnect()
+                except socket.error:
+                        print "Socket error!"
+                        
     def _on_connect(self, client, userdata, flags, r):
         if r == 0:
             print(self.client_id + " Connected to broker")
             self.Connected = True                           #Signal connection
         else:
             print("Connection failed")
+    
     def clean_up(self):
         self.client.disconnect()
         self.client.loop_stop()
