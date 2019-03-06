@@ -23,7 +23,7 @@ class mqtt_connection:
         self.client.on_connect= self._on_connect                            #attach function to connection established call
         self.client.on_disconnect= self._on_disconnect                      #attach function to connection lost call
         self.client.on_message= on_message                                  #attach function to callback
-        if certificate is not None:					    #attach tls if given a certificate
+        if cert is not None:					                            #attach tls if given a certificate
             self.client.tls_set(cert, tls_version=ssl.PROTOCOL_TLSv1_2)
         self.client.connect(self.broker_address, port=self.port)          #connect to broker
         self.client.loop_start()                                          #start the loop
