@@ -2,7 +2,7 @@ import cv2
 import time
 from common_utils.web_video_stream import mjpg_stream
 
-mjpg = mjpg_stream(ip='127.0.0.1',fileName='stream.mjpg',port=8080,supressDebug=False)
+mjpg = mjpg_stream(ip='10.33.109.23',fileName='stream',port=8080, auth='admin:admin',supressDebug=False)
 
 try:
     while True:
