@@ -4,7 +4,7 @@ from common_utils.ssh import ssh_client
 host = 'localhost'
 port = '20'
 username = 'caio'
-password = '5ASecNor6ASec'
+password = 'password'
 
 #Starting SSH Client
 ssh = ssh_client(host, username, password, port=22, key=None, passphrase=None)
